@@ -31,6 +31,7 @@
 #include <event2/event_struct.h>
 #include <errno.h>
 #include <getopt.h>
+#include <inttypes.h>
 #include <limits.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -120,7 +121,7 @@ test_ovsdb_libevent_loop(int param, char *return_status)
 		libevent_cnt_end = ovs_libevent_get_counter();
 		libevent_cnt_total = libevent_cnt_end - libevent_cnt_start;
 		if (libevent_cnt_total >= LIBEVENT_TEST_CNT) {
-			VLOG_INFO("libevent unit test done - start=%lu end=%lu",
+			VLOG_INFO("libevent unit test done - start=%" PRIu64 " end=%" PRIu64,
 				  libevent_cnt_start, libevent_cnt_end);
 			sprintf(return_status, "%s", "OK");
 		} else {

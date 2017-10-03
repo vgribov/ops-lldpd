@@ -22,6 +22,7 @@
  *
  * Purpose:  To add LLDP CLI configuration and display commands.
  */
+#include <inttypes.h>
 #include <sys/un.h>
 #include <setjmp.h>
 #include <sys/wait.h>
@@ -838,19 +839,19 @@ DEFUN (cli_lldp_show_intf_statistics,
 
         atom.string = lldp_interface_statistics_keys[0];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets transmitted :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets transmitted :%" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys [1];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received :%" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys[2];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received and discarded :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received and discarded :%" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_statistics_keys[3];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Packets received and unrecognized :%ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Packets received and unrecognized :%" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
         break;
      }
   }
@@ -1457,16 +1458,16 @@ DEFUN (cli_lldp_show_intf_neighbor_info,
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
         delete_cnt = (index == UINT_MAX) ? 0 : datum->values[index].integer;
 
-        vty_out(vty, "Neighbor entries               : %ld%s", (insert_cnt-delete_cnt), VTY_NEWLINE);
-        vty_out(vty, "Neighbor entries deleted       : %ld%s", delete_cnt, VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries               : %" PRIi64 "%s", (insert_cnt-delete_cnt), VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries deleted       : %" PRIi64 "%s", delete_cnt, VTY_NEWLINE);
 
         atom.string = lldp_interface_neighbor_info_keys[2];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Neighbor entries dropped       : %ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries dropped       : %" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         atom.string = lldp_interface_neighbor_info_keys[3];
         index = ovsdb_datum_find_key(datum, &atom, OVSDB_TYPE_STRING);
-        vty_out(vty, "Neighbor entries age-out       : %ld%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
+        vty_out(vty, "Neighbor entries age-out       : %" PRIi64 "%s",(index == UINT_MAX)? 0 : datum->values[index].integer,VTY_NEWLINE);
 
         datum = ovsrec_interface_get_lldp_neighbor_info(ifrow, OVSDB_TYPE_STRING, OVSDB_TYPE_STRING);
 

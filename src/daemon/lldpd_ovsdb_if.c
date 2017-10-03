@@ -1760,7 +1760,7 @@ static char *lldp_interface_statistics_keys[] = {
 		(void) ovsdb_datum_get_int64_value_given_string_key(	\
 			(struct ovsdb_datum *)datum, KEY, &db_value);	\
 		dual_itf->hw->HW_COUNTER += db_value;			\
-		VLOG_DBG("%s counter %s restored to %ld",		\
+		VLOG_DBG("%s counter %s restored to %" PRIi64,		\
 			 dual_itf->name, KEY, db_value);		\
 	}
 
