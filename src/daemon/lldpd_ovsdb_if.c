@@ -621,14 +621,15 @@ del_old_db_interface(struct shash_node *sh_node)
 		 * remove the entry else just nullify
 		 * ovsdb record handle
 		 */
-		if (itf && !itf->hw) {
-			free(itf->name);
-			free(sh_node->data);
-			shash_delete(&all_interfaces, sh_node);
-		} else {
-			itf->ifrow = NULL;
+		if (itf) {
+			if (!itf->hw) {
+				free(itf->name);
+				free(sh_node->data);
+				shash_delete(&all_interfaces, sh_node);
+			} else {
+				itf->ifrow = NULL;
+			}
 		}
-
 	}
 }                               /* del_old_interface */
 
@@ -636,12 +637,12 @@ static void
 add_new_db_interface(const struct ovsrec_interface *ifrow)
 {
 	struct interface_data *new_itf = NULL;
-	struct shash_node *sh_node = shash_find(&all_interfaces, ifrow->name);
+	struct shash_node *sh_node;
 
 	if (!ifrow)
 		return;
-
 	VLOG_DBG("Interface %s being added!\n", ifrow->name);
+	sh_node = shash_find(&all_interfaces, ifrow->name);
 
 	if (!sh_node) {
 		/* Allocate structure to save state information for this interface. */
@@ -984,28 +985,30 @@ del_old_port(struct shash_node *sh_node)
 	if (sh_node) {
 		struct port_data *port = sh_node->data;
 
-		VLOG_INFO("number of interfaces in port = %d", port->n_interfaces);
-		/* Clean up lldp hardware vlan info */
-		if (port && port->n_interfaces && port->interfaces) {
-			for (k = 0; k < port->n_interfaces; k++) {
-				struct interface_data *intf = NULL;
+		if (port) {
+			VLOG_INFO("number of interfaces in port = %d", port->n_interfaces);
+			/* Clean up lldp hardware vlan info */
+			if (port->n_interfaces && port->interfaces) {
+				for (k = 0; k < port->n_interfaces; k++) {
+					struct interface_data *intf = NULL;
 
-				if (port->interfaces[k])
-					intf =
-						shash_find_data(&all_interfaces,
-								port->interfaces[k]->hw->h_ifname);
-				if (!intf) {
-					continue;
+					if (port->interfaces[k])
+						intf =
+							shash_find_data(&all_interfaces,
+									port->interfaces[k]->hw->h_ifname);
+					if (!intf) {
+						continue;
+					}
+					intf->portdata = NULL;
+					VLOG_INFO("Cleaning up vlan info for Interface %s",
+						  port->interfaces[k]->hw->h_ifname);
+					lldpd_vlan_cleanup(&port->interfaces[k]->hw->h_lport);
+					port->interfaces[k]->hw->h_lport.p_pvid = 0;
+					rc++;
 				}
-				intf->portdata = NULL;
-				VLOG_INFO("Cleaning up vlan info for Interface %s",
-					  port->interfaces[k]->hw->h_ifname);
-				lldpd_vlan_cleanup(&port->interfaces[k]->hw->h_lport);
-				port->interfaces[k]->hw->h_lport.p_pvid = 0;
-				rc++;
+				free(port->interfaces);
+				port->n_interfaces = 0;
 			}
-			free(port->interfaces);
-			port->n_interfaces = 0;
 		}
 
 		/*
@@ -1015,7 +1018,9 @@ del_old_port(struct shash_node *sh_node)
 		shash_delete(&all_ports, sh_node);
 
 		/* Done -  Free the rest of the structure */
-		free(port->name);
+		if (port) {
+			free(port->name);
+		}
 		free(port);
 	}
 
