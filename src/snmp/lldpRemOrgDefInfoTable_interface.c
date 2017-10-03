@@ -247,10 +247,10 @@ int lldpRemOrgDefInfoTable_index_from_oid(
 
     err = parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpRemTimeMark);
     if (err == SNMP_ERR_NOERROR) {
-        mib_idx->lldpRemTimeMark = *((long *)var_lldpRemTimeMark.val.string);
+        mib_idx->lldpRemTimeMark = *var_lldpRemTimeMark.val.integer;
         mib_idx->lldpRemLocalPortNum =
-            *((long *)var_lldpRemLocalPortNum.val.string);
-        mib_idx->lldpRemIndex = *((long *)var_lldpRemIndex.val.string);
+            *var_lldpRemLocalPortNum.val.integer;
+        mib_idx->lldpRemIndex = *var_lldpRemIndex.val.integer;
         if (var_lldpRemOrgDefInfoOUI.val_len >
             sizeof(mib_idx->lldpRemOrgDefInfoOUI)) {
             err = SNMP_ERR_GENERR;
@@ -263,9 +263,9 @@ int lldpRemOrgDefInfoTable_index_from_oid(
                 sizeof(mib_idx->lldpRemOrgDefInfoOUI[0]);
         }
         mib_idx->lldpRemOrgDefInfoSubtype =
-            *((long *)var_lldpRemOrgDefInfoSubtype.val.string);
+            *var_lldpRemOrgDefInfoSubtype.val.integer;
         mib_idx->lldpRemOrgDefInfoIndex =
-            *((long *)var_lldpRemOrgDefInfoIndex.val.string);
+            *var_lldpRemOrgDefInfoIndex.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpRemTimeMark);

@@ -176,7 +176,7 @@ int lldpStatsTxPortTable_index_from_oid(
         parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpStatsTxPortNum);
     if (err == SNMP_ERR_NOERROR) {
         mib_idx->lldpStatsTxPortNum =
-            *((long *)var_lldpStatsTxPortNum.val.string);
+            *var_lldpStatsTxPortNum.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpStatsTxPortNum);
@@ -322,7 +322,7 @@ _lldpStatsTxPortTable_get_column(lldpStatsTxPortTable_rowreq_ctx *rowreq_ctx,
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc =
-            lldpStatsTxPortFramesTotal_get(rowreq_ctx, (long *)var->val.string);
+            lldpStatsTxPortFramesTotal_get(rowreq_ctx, var->val.integer);
     } break;
     default:
         if (LLDPSTATSTXPORTTABLE_MIN_COL <= column &&

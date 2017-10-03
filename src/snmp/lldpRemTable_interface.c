@@ -188,10 +188,10 @@ int lldpRemTable_index_from_oid(netsnmp_index *oid_idx,
 
     err = parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpRemTimeMark);
     if (err == SNMP_ERR_NOERROR) {
-        mib_idx->lldpRemTimeMark = *((long *)var_lldpRemTimeMark.val.string);
+        mib_idx->lldpRemTimeMark = *var_lldpRemTimeMark.val.integer;
         mib_idx->lldpRemLocalPortNum =
-            *((long *)var_lldpRemLocalPortNum.val.string);
-        mib_idx->lldpRemIndex = *((long *)var_lldpRemIndex.val.string);
+            *var_lldpRemLocalPortNum.val.integer;
+        mib_idx->lldpRemIndex = *var_lldpRemIndex.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpRemTimeMark);
@@ -327,7 +327,7 @@ _lldpRemTable_get_column(lldpRemTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPREMCHASSISIDSUBTYPE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpRemChassisIdSubtype_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpRemChassisIdSubtype_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPREMCHASSISID: {
         var->type = ASN_OCTET_STR;
@@ -337,7 +337,7 @@ _lldpRemTable_get_column(lldpRemTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPREMPORTIDSUBTYPE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpRemPortIdSubtype_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpRemPortIdSubtype_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPREMPORTID: {
         var->type = ASN_OCTET_STR;
@@ -363,11 +363,11 @@ _lldpRemTable_get_column(lldpRemTable_rowreq_ctx *rowreq_ctx,
         u_long mask = (u_long)0xff << ((sizeof(char) - 1) * 8);
         int idx = 0;
         var->type = ASN_OCTET_STR;
-        rc = lldpRemSysCapSupported_get(rowreq_ctx, (u_long *)var->val.string);
+        rc = lldpRemSysCapSupported_get(rowreq_ctx, (u_long *)var->val.integer);
         var->val_len = 0;
         while (0 != mask) {
             ++idx;
-            if (*((u_long *)var->val.string) & mask)
+            if (*((u_long *)var->val.integer) & mask)
                 var->val_len = idx;
             mask = mask >> 8;
         }
@@ -376,11 +376,11 @@ _lldpRemTable_get_column(lldpRemTable_rowreq_ctx *rowreq_ctx,
         u_long mask = (u_long)0xff << ((sizeof(char) - 1) * 8);
         int idx = 0;
         var->type = ASN_OCTET_STR;
-        rc = lldpRemSysCapEnabled_get(rowreq_ctx, (u_long *)var->val.string);
+        rc = lldpRemSysCapEnabled_get(rowreq_ctx, (u_long *)var->val.integer);
         var->val_len = 0;
         while (0 != mask) {
             ++idx;
-            if (*((u_long *)var->val.string) & mask)
+            if (*((u_long *)var->val.integer) & mask)
                 var->val_len = idx;
             mask = mask >> 8;
         }

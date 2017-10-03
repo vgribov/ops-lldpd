@@ -175,7 +175,7 @@ int lldpPortConfigTable_index_from_oid(netsnmp_index *oid_idx,
                             &var_lldpPortConfigPortNum);
     if (err == SNMP_ERR_NOERROR) {
         mib_idx->lldpPortConfigPortNum =
-            *((long *)var_lldpPortConfigPortNum.val.string);
+            *var_lldpPortConfigPortNum.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpPortConfigPortNum);
@@ -320,24 +320,24 @@ _lldpPortConfigTable_get_column(lldpPortConfigTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPPORTCONFIGADMINSTATUS: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpPortConfigAdminStatus_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpPortConfigAdminStatus_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPPORTCONFIGNOTIFICATIONENABLE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpPortConfigNotificationEnable_get(rowreq_ctx,
-                                                  (long *)var->val.string);
+                                                  var->val.integer);
     } break;
     case COLUMN_LLDPPORTCONFIGTLVSTXENABLE: {
         u_long mask = (u_long)0xff << ((sizeof(char) - 1) * 8);
         int idx = 0;
         var->type = ASN_OCTET_STR;
         rc = lldpPortConfigTLVsTxEnable_get(rowreq_ctx,
-                                            (u_long *)var->val.string);
+                                            (u_long *)var->val.integer);
         var->val_len = 0;
         while (0 != mask) {
             ++idx;
-            if (*((u_long *)var->val.string) & mask)
+            if (*((u_long *)var->val.integer) & mask)
                 var->val_len = idx;
             mask = mask >> 8;
         }

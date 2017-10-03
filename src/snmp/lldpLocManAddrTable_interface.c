@@ -188,7 +188,7 @@ int lldpLocManAddrTable_index_from_oid(netsnmp_index *oid_idx,
                             &var_lldpLocManAddrSubtype);
     if (err == SNMP_ERR_NOERROR) {
         mib_idx->lldpLocManAddrSubtype =
-            *((long *)var_lldpLocManAddrSubtype.val.string);
+            *var_lldpLocManAddrSubtype.val.integer;
         if (var_lldpLocManAddr.val_len > sizeof(mib_idx->lldpLocManAddr)) {
             err = SNMP_ERR_GENERR;
         } else {
@@ -341,17 +341,17 @@ _lldpLocManAddrTable_get_column(lldpLocManAddrTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPLOCMANADDRLEN: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpLocManAddrLen_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpLocManAddrLen_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPLOCMANADDRIFSUBTYPE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpLocManAddrIfSubtype_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpLocManAddrIfSubtype_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPLOCMANADDRIFID: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpLocManAddrIfId_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpLocManAddrIfId_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPLOCMANADDROID: {
         var->type = ASN_OBJECT_ID;

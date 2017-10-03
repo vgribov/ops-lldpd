@@ -176,7 +176,7 @@ int lldpStatsRxPortTable_index_from_oid(
         parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpStatsRxPortNum);
     if (err == SNMP_ERR_NOERROR) {
         mib_idx->lldpStatsRxPortNum =
-            *((long *)var_lldpStatsRxPortNum.val.string);
+            *var_lldpStatsRxPortNum.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpStatsRxPortNum);
@@ -322,37 +322,37 @@ _lldpStatsRxPortTable_get_column(lldpStatsRxPortTable_rowreq_ctx *rowreq_ctx,
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpStatsRxPortFramesDiscardedTotal_get(rowreq_ctx,
-                                                     (long *)var->val.string);
+                                                     var->val.integer);
     } break;
     case COLUMN_LLDPSTATSRXPORTFRAMESERRORS: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpStatsRxPortFramesErrors_get(rowreq_ctx,
-                                             (long *)var->val.string);
+                                             var->val.integer);
     } break;
     case COLUMN_LLDPSTATSRXPORTFRAMESTOTAL: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc =
-            lldpStatsRxPortFramesTotal_get(rowreq_ctx, (long *)var->val.string);
+            lldpStatsRxPortFramesTotal_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPSTATSRXPORTTLVSDISCARDEDTOTAL: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpStatsRxPortTLVsDiscardedTotal_get(rowreq_ctx,
-                                                   (long *)var->val.string);
+                                                   var->val.integer);
     } break;
     case COLUMN_LLDPSTATSRXPORTTLVSUNRECOGNIZEDTOTAL: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpStatsRxPortTLVsUnrecognizedTotal_get(rowreq_ctx,
-                                                      (long *)var->val.string);
+                                                      var->val.integer);
     } break;
     case COLUMN_LLDPSTATSRXPORTAGEOUTSTOTAL: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
         rc = lldpStatsRxPortAgeoutsTotal_get(rowreq_ctx,
-                                             (long *)var->val.string);
+                                             var->val.integer);
     } break;
     default:
         if (LLDPSTATSRXPORTTABLE_MIN_COL <= column &&

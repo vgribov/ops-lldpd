@@ -224,12 +224,12 @@ int lldpRemManAddrTable_index_from_oid(netsnmp_index *oid_idx,
 
     err = parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpRemTimeMark);
     if (err == SNMP_ERR_NOERROR) {
-        mib_idx->lldpRemTimeMark = *((long *)var_lldpRemTimeMark.val.string);
+        mib_idx->lldpRemTimeMark = *var_lldpRemTimeMark.val.integer;
         mib_idx->lldpRemLocalPortNum =
-            *((long *)var_lldpRemLocalPortNum.val.string);
-        mib_idx->lldpRemIndex = *((long *)var_lldpRemIndex.val.string);
+            *var_lldpRemLocalPortNum.val.integer;
+        mib_idx->lldpRemIndex = *var_lldpRemIndex.val.integer;
         mib_idx->lldpRemManAddrSubtype =
-            *((long *)var_lldpRemManAddrSubtype.val.string);
+            *var_lldpRemManAddrSubtype.val.integer;
         if (var_lldpRemManAddr.val_len > sizeof(mib_idx->lldpRemManAddr)) {
             err = SNMP_ERR_GENERR;
         } else {
@@ -382,12 +382,12 @@ _lldpRemManAddrTable_get_column(lldpRemManAddrTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPREMMANADDRIFSUBTYPE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpRemManAddrIfSubtype_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpRemManAddrIfSubtype_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPREMMANADDRIFID: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpRemManAddrIfId_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpRemManAddrIfId_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPREMMANADDROID: {
         var->type = ASN_OBJECT_ID;

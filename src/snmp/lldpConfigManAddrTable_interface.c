@@ -193,7 +193,7 @@ int lldpConfigManAddrTable_index_from_oid(
                             &var_lldpLocManAddrSubtype);
     if (err == SNMP_ERR_NOERROR) {
         mib_idx->lldpLocManAddrSubtype =
-            *((long *)var_lldpLocManAddrSubtype.val.string);
+            *var_lldpLocManAddrSubtype.val.integer;
         if (var_lldpLocManAddr.val_len > sizeof(mib_idx->lldpLocManAddr)) {
             err = SNMP_ERR_GENERR;
         } else {

@@ -169,7 +169,7 @@ int lldpLocPortTable_index_from_oid(netsnmp_index *oid_idx,
 
     err = parse_oid_indexes(oid_idx->oids, oid_idx->len, &var_lldpLocPortNum);
     if (err == SNMP_ERR_NOERROR) {
-        mib_idx->lldpLocPortNum = *((long *)var_lldpLocPortNum.val.string);
+        mib_idx->lldpLocPortNum = *var_lldpLocPortNum.val.integer;
     }
 
     snmp_reset_var_buffers(&var_lldpLocPortNum);
@@ -310,7 +310,7 @@ _lldpLocPortTable_get_column(lldpLocPortTable_rowreq_ctx *rowreq_ctx,
     case COLUMN_LLDPLOCPORTIDSUBTYPE: {
         var->type = ASN_INTEGER;
         var->val_len = sizeof(long);
-        rc = lldpLocPortIdSubtype_get(rowreq_ctx, (long *)var->val.string);
+        rc = lldpLocPortIdSubtype_get(rowreq_ctx, var->val.integer);
     } break;
     case COLUMN_LLDPLOCPORTID: {
         var->type = ASN_OCTET_STR;
